@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# 环境变量与密钥（切勿提交）
+.env
+.env.*
+!.env.example
+
+# 运行时数据（含数据库、账户配置、AI Key、认证密钥）
+data/
+backend/data/
+*.log
+*.log.*
+
+# 前端
+frontend/node_modules/
+frontend/dist/
+
+# 导出产物（内嵌 Token，切勿提交）
+quant_trader_mcp.py
+arl_mcp.py
+
+# 打包临时
+*.tar.gz
+*.zip
+
+# IDE
+.idea/
+.vscode/
+.zcode/

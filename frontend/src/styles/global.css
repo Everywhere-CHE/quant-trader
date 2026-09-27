@@ -1,0 +1,620 @@
+/* 全局样式与主题 CSS 变量。 */
+
+/* Tailwind v4：仅引入 theme + utilities，不引入 preflight，
+   避免影响其余页面的 antd 组件样式。dark 变体挂接现有 data-theme。 */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme {
+  --font-sans: 'Inter', -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas,
+    monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, 'Segoe UI', Roboto, 'PingFang SC',
+    'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 国内市场惯例：红涨绿跌（低饱和度：柔粉涨 / 薄荷绿跌） */
+body[data-theme='dark'] {
+  --up-color: #fb7185;
+  --down-color: #34d399;
+  --glass-glow: rgba(129, 140, 248, 0.12);
+  --panel-bg: #141414;
+  --chart-bg: #141414;
+  --chart-text: #aaaaaa;
+  --chart-grid: #2a2a2a;
+  --border-color: #303030;
+  background-color: #000;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme='light'] {
+  --up-color: #f43f5e;
+  --down-color: #10b981;
+  --glass-glow: rgba(255, 255, 255, 0.7);
+  --panel-bg: #ffffff;
+  --chart-bg: #ffffff;
+  --chart-text: #555555;
+  --chart-grid: #eeeeee;
+  --border-color: #e8e8e8;
+  background-color: #f5f5f5;
+  color: rgba(0, 0, 0, 0.88);
+}
+
+.price-up {
+  color: var(--up-color);
+}
+
+.price-down {
+  color: var(--down-color);
+}
+
+.mono {
+  font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, Consolas,
+    monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 底部面板的紧凑表格 */
+.compact-table .ant-table-cell {
+  padding: 4px 8px !important;
+  font-size: 12px;
+}
+
+/* 五档盘口行 */
+.depth-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 3px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  transition: background 0.15s ease;
+}
+
+.depth-row:hover {
+  background: rgba(22, 119, 255, 0.06);
+}
+
+.log-line {
+  font-size: 12px;
+  font-family: Consolas, Monaco, monospace;
+  white-space: nowrap;
+}
+
+/* 自选列表行：悬停时显示移除按钮 */
+.watch-row .watch-remove {
+  visibility: hidden;
+}
+
+.watch-row:hover .watch-remove {
+  visibility: visible;
+}
+
+/* 新委托高亮动画 */
+@keyframes row-highlight {
+  0% {
+    background: rgba(22, 119, 255, 0.25);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+.order-row-new {
+  animation: row-highlight 1.5s ease-out forwards;
+}
+
+/* 状态标签过渡效果 */
+.order-status-tag {
+  transition: all 0.3s ease;
+}
+
+/* 表格行悬停效果 */
+.compact-table .ant-table-row {
+  transition: background 0.2s ease;
+}
+
+/* AI 助手 Markdown 回复样式 */
+.ai-markdown > *:first-child {
+  margin-top: 0;
+}
+
+.ai-markdown > *:last-child {
+  margin-bottom: 0;
+}
+
+.ai-markdown p {
+  margin: 4px 0;
+}
+
+.ai-markdown h1,
+.ai-markdown h2,
+.ai-markdown h3,
+.ai-markdown h4 {
+  margin: 10px 0 4px;
+  font-size: 14px;
+}
+
+.ai-markdown ul,
+.ai-markdown ol {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+
+.ai-markdown table {
+  border-collapse: collapse;
+  margin: 6px 0;
+  font-size: 12px;
+}
+
+.ai-markdown th,
+.ai-markdown td {
+  border: 1px solid var(--border-color);
+  padding: 3px 8px;
+}
+
+.ai-markdown th {
+  background: rgba(128, 128, 128, 0.12);
+}
+
+.ai-markdown code {
+  background: rgba(128, 128, 128, 0.15);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: Consolas, Monaco, monospace;
+  font-size: 12px;
+}
+
+.ai-markdown pre {
+  background: rgba(128, 128, 128, 0.12);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 8px;
+  overflow: auto;
+  margin: 6px 0;
+}
+
+.ai-markdown pre code {
+  background: none;
+  padding: 0;
+}
+
+.ai-markdown blockquote {
+  border-left: 3px solid var(--border-color);
+  margin: 6px 0;
+  padding: 2px 10px;
+  color: inherit;
+  opacity: 0.85;
+}
+
+/* ===== 玻璃态终端页辅助样式（仅交易终端使用） ===== */
+
+/* 玻璃面板内的 antd 表格：透明化底色，融入玻璃态 */
+.glass-table .ant-table,
+.glass-table .ant-table-container,
+.glass-table .ant-table-content,
+.glass-page .ant-table,
+.glass-page .ant-table-container,
+.glass-page .ant-table-content {
+  background: transparent;
+}
+
+.glass-page .ant-card {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+}
+
+[data-theme='dark'] .glass-page .ant-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 玻璃页内面板底色变量：让页内 inline var(--panel-bg) 自动半透明 */
+.glass-page {
+  --panel-bg: rgba(255, 255, 255, 0.45);
+  --border-color: rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+}
+
+[data-theme='dark'] .glass-page {
+  --panel-bg: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-table .ant-table-thead > tr > th {
+  background: transparent;
+  color: rgb(100 116 139);
+  font-weight: 500;
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme='dark'] .glass-page .ant-card {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+}
+
+[data-theme='dark'] .glass-page .ant-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 玻璃页内面板底色变量：让页内 inline var(--panel-bg) 自动半透明 */
+.glass-page {
+  --panel-bg: rgba(255, 255, 255, 0.45);
+  --border-color: rgba(0, 0, 0, 0.07);
+  border-radius: 16px;
+}
+
+[data-theme='dark'] .glass-page {
+  --panel-bg: rgba(255, 255, 255, 0.06);
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+.glass-table .ant-table-thead > tr > th {
+  color: rgb(148 163 184);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+.glass-table .ant-table-thead > tr > th::before {
+  display: none;
+}
+
+.glass-table .ant-table-tbody > tr > td {
+  border-bottom-color: rgba(0, 0, 0, 0.045);
+}
+
+[data-theme='dark'] .glass-table .ant-table-tbody > tr > td {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.glass-table .ant-table-tbody > tr:hover > td {
+  background: rgba(22, 119, 255, 0.06) !important;
+}
+
+[data-theme='dark'] .glass-table .ant-table-tbody > tr:hover > td {
+  background: rgba(22, 119, 255, 0.1) !important;
+}
+
+/* 玻璃面板内的 antd Tabs：极简下划线 */
+.glass-tabs > .ant-tabs-nav {
+  margin-bottom: 0;
+  padding: 0 10px;
+  background: transparent;
+}
+
+.glass-tabs > .ant-tabs-nav::before {
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme='dark'] .glass-tabs > .ant-tabs-nav::before {
+  border-bottom-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ===== glass-ui：全站 antd 组件玻璃化（作用于 App 内容层） ===== */
+
+/* 默认按钮 → 玻璃胶囊 */
+.glass-ui .ant-btn-default {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+.glass-ui .ant-btn-default:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.8);
+  border-color: #69b1ff;
+  color: #0958d9;
+}
+[data-theme='dark'] .glass-ui .ant-btn-default {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+[data-theme='dark'] .glass-ui .ant-btn-default:not(:disabled):hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #1677ff;
+  color: #69b1ff;
+}
+
+/* 主按钮 → 靛蓝渐变（与 Logo/发送按钮同语言） */
+.glass-ui .ant-btn-primary {
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #4d9fff 0%, #1677ff 100%);
+  box-shadow: 0 3px 10px rgba(22, 119, 255, 0.3);
+}
+.glass-ui .ant-btn-primary:not(:disabled):hover {
+  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%);
+}
+.glass-ui .ant-btn-primary:disabled {
+  background: rgba(148, 163, 184, 0.3);
+  box-shadow: none;
+}
+
+/* 危险按钮柔和化 */
+.glass-ui .ant-btn-dangerous.ant-btn-default {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #f43f5e;
+}
+[data-theme='dark'] .glass-ui .ant-btn-dangerous.ant-btn-default {
+  background: rgba(244, 63, 94, 0.12);
+}
+.glass-ui .ant-btn-dangerous.ant-btn-primary {
+  background: linear-gradient(135deg, #fb7185 0%, #f43f5e 100%);
+  box-shadow: 0 3px 10px rgba(244, 63, 94, 0.3);
+}
+
+/* Card：透明头 + 小节标题风格 */
+.glass-ui .ant-card-head {
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+[data-theme='dark'] .glass-ui .ant-card-head {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+.glass-ui .ant-card-head-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgb(51, 65, 85);
+}
+[data-theme='dark'] .glass-ui .ant-card-head-title {
+  color: rgb(226, 232, 240);
+}
+.glass-ui .ant-card-extra { color: rgb(100, 116, 139); }
+
+/* 输入控件半透明圆角 */
+.glass-ui .ant-input,
+.glass-ui .ant-input-number,
+.glass-ui .ant-input-affix-wrapper,
+.glass-ui .ant-picker,
+.glass-ui .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background: rgba(255, 255, 255, 0.5) !important;
+  border-radius: 10px;
+}
+[data-theme='dark'] .glass-ui .ant-input,
+[data-theme='dark'] .glass-ui .ant-input-number,
+[data-theme='dark'] .glass-ui .ant-input-affix-wrapper,
+[data-theme='dark'] .glass-ui .ant-picker,
+[data-theme='dark'] .glass-ui .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+.glass-ui .ant-input-number-group-addon,
+.glass-ui .ant-input-group-addon {
+  background: rgba(22, 119, 255, 0.07);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: rgb(71, 85, 105);
+}
+[data-theme='dark'] .glass-ui .ant-input-number-group-addon,
+[data-theme='dark'] .glass-ui .ant-input-group-addon {
+  background: rgba(22, 119, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: rgb(148, 163, 184);
+}
+
+/* Radio.Group 按钮组 → 玻璃分段 */
+.glass-ui .ant-radio-button-wrapper {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+[data-theme='dark'] .glass-ui .ant-radio-button-wrapper {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.glass-ui .ant-radio-button-wrapper:not(:first-child)::before {
+  background: rgba(0, 0, 0, 0.06);
+}
+[data-theme='dark'] .glass-ui .ant-radio-button-wrapper:not(:first-child)::before {
+  background: rgba(255, 255, 255, 0.12);
+}
+.glass-ui .ant-radio-button-wrapper-checked:not(:first-child)::before {
+  background: #6366f1 !important;
+}
+.glass-ui .ant-radio-button-wrapper-checked {
+  background: rgba(22, 119, 255, 0.12) !important;
+  border-color: #6366f1 !important;
+  color: #4f46e5 !important;
+  box-shadow: none;
+}
+[data-theme='dark'] .glass-ui .ant-radio-button-wrapper-checked {
+  background: rgba(22, 119, 255, 0.18) !important;
+  color: #a5b4fc !important;
+}
+
+/* Collapse 玻璃化 */
+.glass-ui .ant-collapse {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 12px;
+  border-color: rgba(0, 0, 0, 0.06);
+}
+.glass-ui .ant-collapse > .ant-collapse-item {
+  border-color: rgba(0, 0, 0, 0.06);
+}
+[data-theme='dark'] .glass-ui .ant-collapse {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+[data-theme='dark'] .glass-ui .ant-collapse > .ant-collapse-item {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Segmented 玻璃化（买入/卖出切换等） */
+.glass-ui .ant-segmented {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+}
+[data-theme='dark'] .glass-ui .ant-segmented {
+  background: rgba(255, 255, 255, 0.08);
+}
+.glass-ui .ant-segmented-item-selected {
+  border-radius: 10px;
+}
+
+/* ===== 玻璃态弹窗（所有 Modal / Popconfirm 统一风格） ===== */
+
+/* 遮罩：变暗 + 背景模糊（ARL 参考图的磨砂景深效果） */
+.ant-modal-mask {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 23, 42, 0.3) !important;
+}
+[data-theme='dark'] .ant-modal-mask {
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+
+/* 弹窗本体：白玻璃卡片 */
+.ant-modal .ant-modal-content {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.18);
+  padding: 20px 24px;
+}
+[data-theme='dark'] .ant-modal .ant-modal-content {
+  background: rgba(15, 23, 42, 0.82);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+}
+
+.ant-modal .ant-modal-header {
+  background: transparent;
+}
+.ant-modal .ant-modal-title {
+  font-weight: 700;
+  color: rgb(30, 41, 59);
+}
+[data-theme='dark'] .ant-modal .ant-modal-title {
+  color: rgb(241, 245, 249);
+}
+
+.ant-modal .ant-modal-close {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  top: 14px;
+  inset-inline-end: 14px;
+}
+.ant-modal .ant-modal-close:hover {
+  background: rgba(244, 63, 94, 0.1);
+  color: #f43f5e;
+}
+[data-theme='dark'] .ant-modal .ant-modal-close {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* 弹窗内输入控件：半透明圆角 */
+.ant-modal .ant-input,
+.ant-modal .ant-input-number,
+.ant-modal .ant-input-affix-wrapper,
+.ant-modal .ant-picker,
+.ant-modal .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background: rgba(255, 255, 255, 0.6) !important;
+  border-radius: 10px;
+}
+[data-theme='dark'] .ant-modal .ant-input,
+[data-theme='dark'] .ant-modal .ant-input-number,
+[data-theme='dark'] .ant-modal .ant-input-affix-wrapper,
+[data-theme='dark'] .ant-modal .ant-picker,
+[data-theme='dark'] .ant-modal .ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* 弹窗内按钮：与 glass-ui 同语言 */
+.ant-modal .ant-btn-default {
+  background: rgba(255, 255, 255, 0.55);
+  border-color: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+.ant-modal .ant-btn-default:not(:disabled):hover {
+  border-color: #69b1ff;
+  color: #0958d9;
+}
+[data-theme='dark'] .ant-modal .ant-btn-default {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.ant-modal .ant-btn-primary {
+  border-radius: 12px;
+  border: none;
+  background: linear-gradient(135deg, #4d9fff 0%, #1677ff 100%);
+  box-shadow: 0 3px 10px rgba(22, 119, 255, 0.3);
+}
+.ant-modal .ant-btn-primary:not(:disabled):hover {
+  background: linear-gradient(135deg, #1677ff 0%, #0958d9 100%);
+}
+.ant-modal .ant-btn-primary:disabled {
+  background: rgba(148, 163, 184, 0.3);
+  box-shadow: none;
+}
+.ant-modal .ant-btn-dangerous.ant-btn-default {
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #f43f5e;
+}
+
+/* 弹窗内 Alert / 表单标签 */
+.ant-modal .ant-alert {
+  border-radius: 12px;
+}
+.ant-modal .ant-form-item .ant-form-item-label > label {
+  color: rgb(71, 85, 105);
+}
+[data-theme='dark'] .ant-modal .ant-form-item .ant-form-item-label > label {
+  color: rgb(148, 163, 184);
+}
+
+/* Popconfirm / 气泡卡片玻璃化 */
+.ant-popover .ant-popover-inner {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+}
+[data-theme='dark'] .ant-popover .ant-popover-inner {
+  background: rgba(15, 23, 42, 0.88);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+/* 弹窗内 Radio.Group 按钮组 */
+.ant-modal .ant-radio-button-wrapper {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+[data-theme='dark'] .ant-modal .ant-radio-button-wrapper {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.ant-modal .ant-radio-button-wrapper-checked {
+  background: rgba(22, 119, 255, 0.12) !important;
+  border-color: #6366f1 !important;
+  color: #4f46e5 !important;
+  box-shadow: none;
+}
+[data-theme='dark'] .ant-modal .ant-radio-button-wrapper-checked {
+  background: rgba(22, 119, 255, 0.18) !important;
+  color: #a5b4fc !important;
+}
